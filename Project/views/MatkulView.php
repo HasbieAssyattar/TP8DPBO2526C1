@@ -29,7 +29,7 @@ class MatkulView
         }
 
         $tpl = new Template("templates/matkul.html");
-        $tpl->replace("DATA_JUDUL", "Kelola Mata Kuliah - SIAKAD DPBO");
+        $tpl->replace("DATA_JUDUL", "Kelola Mata Kuliah");
         $tpl->replace("DATA_TABEL", $dataTabel);
         $tpl->replace("DATA_OPTION", $dataOption);
 

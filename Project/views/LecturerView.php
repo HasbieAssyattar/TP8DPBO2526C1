@@ -29,7 +29,7 @@ class LecturerView
         }
 
         $tpl = new Template("templates/lecturer.html");
-        $tpl->replace("DATA_JUDUL", "Kelola Dosen - SIAKAD DPBO");
+        $tpl->replace("DATA_JUDUL", "Kelola Dosen");
         $tpl->replace("DATA_TABEL", $dataTabel);
         $tpl->replace("DATA_OPTION", $dataOption);
 

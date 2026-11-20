@@ -20,7 +20,7 @@ class FacultyView
         }
 
         $tpl = new Template("templates/faculty.html");
-        $tpl->replace("DATA_JUDUL", "Kelola Fakultas - SIAKAD DPBO");
+        $tpl->replace("DATA_JUDUL", "Kelola Fakultas");
         $tpl->replace("DATA_TABEL", $dataTabel);
 
         if ($editData != null) {
