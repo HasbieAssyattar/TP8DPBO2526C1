@@ -1,76 +1,85 @@
-# TP8 DPBO - Implementasi Arsitektur Model-View-Controller (MVC)
+# TP8 DPBO
 
-## Janji
+# Jandji
 Saya <strong>Muhamad Hasbie Assyattar</strong> dengan <strong>NIM 2508288</strong> mengerjakan Tugas Praktikum 8 dalam mata kuliah Desain dan Pemrograman Berorientasi Objek untuk keberkahanNya maka saya tidak melakukan kecurangan seperti yang telah dispesifikasikan. Aamiin.
 
-## Desain Program & Arsitektur MVC
-Aplikasi ini dibangun menggunakan arsitektur **Model-View-Controller (MVC)** murni berbasis PHP Native dan Bootstrap 5 dengan konsep *Separation of Concerns*:
+## Desain Kelas
+1. **DB.php (Project/models/DB.php)**
+    - Kelas dasar (*parent class*) pembungkus koneksi MySQLi secara berorientasi objek.
+    - Menyediakan method inti manipulasi database: `open()` untuk inisialisasi koneksi, `execute()` untuk menjalankan query SQL, `getResult()` untuk mengambil baris data (fetch array), dan `close()` untuk menutup koneksi.
+2. **Faculty.php (Project/models/Faculty.php)**
+    - Kelas entitas turunan dari `DB` yang merepresentasikan tabel `faculties`.
+    - Menyediakan method CRUD: `getFaculties()` untuk membaca seluruh fakultas, `getFacultyById()` untuk membaca data spesifik berdasarkan ID, `add()` untuk menambah fakultas baru, `update()` untuk memperbarui data, dan `delete()` untuk menghapus fakultas.
+3. **Lecturer.php (Project/models/Lecturer.php)**
+    - Kelas entitas turunan dari `DB` yang merepresentasikan tabel `lecturers`.
+    - Menyediakan method CRUD lengkap dengan query `JOIN` ke tabel `faculties` pada `getLecturers()` agar kode dan nama fakultas dapat langsung ditampilkan di tabel dosen, serta method `getLecturerById()`, `add()`, `update()`, dan `delete()`.
+4. **Matkul.php (Project/models/Matkul.php)**
+    - Kelas entitas turunan dari `DB` yang merepresentasikan tabel `matkul`.
+    - Menyediakan method CRUD lengkap dengan query `JOIN` ke tabel `lecturers` pada `getMatkul()` agar nama dosen pengampu otomatis terhubung, serta method `getMatkulById()`, `add()`, `update()`, dan `delete()`.
+5. **Template.php (Project/views/Template.php)**
+    - Template engine pengolah tampilan antarmuka berbasis penggantian token (*regex string replacement*).
+    - Membaca file template HTML mentah, mengganti token/placeholder data seperti `DATA_TABEL`, `DATA_OPTION`, `DATA_BUTTON`, dan membersihkan token yang tidak terpakai lewat `clear()`.
+6. **FacultyView.php, LecturerView.php, MatkulView.php (Project/views/...)**
+    - Kelas perender antarmuka (*Presentation Layer*) yang bertugas menyusun baris tabel HTML dan opsi dropdown, lalu menyuntikkannya ke berkas template HTML terkait.
+7. **FacultyController.php, LecturerController.php, MatkulController.php (Project/controllers/...)**
+    - Kelas pengendali alur aplikasi (*Application Layer*) yang mengorkestrasikan komunikasi antara Model dan View, memproses validasi, serta mengatur aksi tambah, perbarui, dan hapus data.
+8. **index.php, lecturers.php, faculties.php, matkul.php (Project/...)**
+    - Berfungsi sebagai router / trigger utama penangkap HTTP Request (GET dan POST) dari pengguna untuk diteruskan ke Controller yang bersangkutan.
 
-### 1. Model (`models/`)
-* **`DB.php`**: Class dasar pengelola koneksi MySQLi (`open()`, `execute()`, `getResult()`, `close()`).
-* **`Faculty.php`**: Mewarisi `DB`, menangani operasi CRUD pada tabel `faculties`.
-* **`Lecturer.php`**: Mewarisi `DB`, menangani operasi CRUD pada tabel `lecturers` dengan query `JOIN faculties` untuk relasi fakultas.
-* **`Matkul.php`**: Mewarisi `DB`, menangani operasi CRUD pada tabel `matkul` dengan query `JOIN lecturers` untuk relasi dosen pengampu.
-
-### 2. View & Template (`views/` & `templates/`)
-* **`Template.php`**: Template engine sederhana untuk membaca berkas HTML murni dan melakukan penggantian token/placeholder (`replace()`).
-* **`FacultyView.php` & `faculty.html`**: Menampilkan antarmuka manajemen fakultas (form input dan tabel data).
-* **`LecturerView.php` & `lecturer.html`**: Menampilkan antarmuka manajemen dosen dilengkapi dropdown pilihan fakultas.
-* **`MatkulView.php` & `matkul.html`**: Menampilkan antarmuka manajemen mata kuliah dilengkapi dropdown pilihan dosen pengampu.
-
-### 3. Controller (`controllers/`)
-* **`FacultyController.php`**: Menjembatani request fakultas ke model `Faculty` dan view `FacultyView`.
-* **`LecturerController.php`**: Mengorkestrasi interaksi data dosen dan data referensi fakultas ke view.
-* **`MatkulController.php`**: Mengorkestrasi interaksi data mata kuliah dan data referensi dosen pengampu ke view.
-
-### 4. Router / Entry Points
-* **`index.php`**: Gerbang utama yang mengarahkan navigasi ke `lecturers.php`.
-* **`lecturers.php`**, **`faculties.php`**, **`matkul.php`**: Menerima request HTTP (POST tambah/edit, GET edit/hapus) dan mendelegasikannya ke masing-masing Controller.
-
----
-
-## Relasi Basis Data (ERD)
-Sistem akademik ini memiliki relasi bertingkat satu-ke-banyak (*one-to-many*):
-1. Satu **Fakultas** menaungi banyak **Dosen** (`faculties.id` $\rightarrow$ `lecturers.faculty_id`).
-2. Satu **Dosen** dapat mengampu banyak **Mata Kuliah** (`lecturers.id` $\rightarrow$ `matkul.lecturer_id`).
-
----
-
-## Struktur Direktori Repository
-```text
-TP8/
-├── db_tp8.sql
-├── README.md
-├── Dokumentasi/
-└── Project/
-    ├── config.php
-    ├── index.php
-    ├── lecturers.php
-    ├── faculties.php
-    ├── matkul.php
-    ├── bootstrap.min.css
-    ├── bootstrap.bundle.min.js
-    ├── controllers/
-    │   ├── FacultyController.php
-    │   ├── LecturerController.php
-    │   └── MatkulController.php
-    ├── models/
-    │   ├── DB.php
-    │   ├── Faculty.php
-    │   ├── Lecturer.php
-    │   └── Matkul.php
-    ├── templates/
-    │   ├── faculty.html
-    │   ├── lecturer.html
-    │   └── matkul.html
-    └── views/
-        ├── FacultyView.php
-        ├── LecturerView.php
-        ├── MatkulView.php
-        └── Template.php
+## Struktur Desain
+```
+TP8
+│   db_tp8.sql
+│   README.md
+│
+├───Dokumentasi
+│       .gitkeep
+│
+└───Project
+    │   bootstrap.bundle.min.js
+    │   bootstrap.min.css
+    │   config.php
+    │   faculties.php
+    │   index.php
+    │   lecturers.php
+    │   matkul.php
+    │
+    ├───controllers
+    │       FacultyController.php
+    │       LecturerController.php
+    │       MatkulController.php
+    │
+    ├───models
+    │       DB.php
+    │       Faculty.php
+    │       Lecturer.php
+    │       Matkul.php
+    │
+    ├───templates
+    │       faculty.html
+    │       lecturer.html
+    │       matkul.html
+    │
+    └───views
+            FacultyView.php
+            LecturerView.php
+            MatkulView.php
+            Template.php
 ```
 
----
+## Anuan Program
+Program ini merupakan website sistem informasi akademik (pengelolaan Fakultas, Dosen, dan Mata Kuliah) berbasis PHP Native berorientasi objek (OOP) dengan pola arsitektur Model-View-Controller (MVC):
+1. Saat web pertama kali dibuka (`index.php`), pengguna secara otomatis diarahkan ke menu utama data **Dosen** (`lecturers.php`). Terdapat bar navigasi di bagian atas untuk berpindah secara dinamis antara menu **Lecturers**, **Faculties**, dan **Matkul**.
+2. Di menu **Faculties**, pengguna dapat mengelola data fakultas yang ada di kampus (kode fakultas dan nama lengkap fakultas). Tersedia fitur tambah, ubah data (edit), dan hapus fakultas.
+3. Di menu **Lecturers**, pengguna dapat mengelola profil dosen (nama lengkap beserta gelar, NIDN, nomor telepon, dan tanggal bergabung). Saat menambah atau mengubah dosen, sistem menyediakan dropdown pilihan fakultas yang diambil langsung secara dinamis dari tabel `faculties`.
+4. Di menu **Matkul**, pengguna dapat mengelola mata kuliah (kode mata kuliah, nama mata kuliah, bobot SKS, dan semester). Dosen pengampu mata kuliah dapat dipilih secara langsung melalui dropdown dinamis yang terhubung ke data `lecturers`.
+5. Arsitektur aplikasi sepenuhnya menerapkan *Separation of Concerns*:
+   - Logika query SQL murni terkapsulasi di dalam folder `models/`.
+   - File tampilan di folder `templates/` murni berkas HTML tanpa kode PHP di dalamnya, di mana injeksi data dilakukan oleh kelas-kelas di folder `views/` menggunakan template parser `Template.php`.
+   - Logika penanganan alur request dikendalikan oleh folder `controllers/`.
+6. Seluruh aksi hapus data dilengkapi dengan konfirmasi dialog untuk mencegah penghapusan yang tidak disengaja.
 
-## Dokumentasi Demo
-*(Tempatkan screenshot atau rekaman layar demo fitur CRUD di folder `Dokumentasi/`)*
+## Dokumentasi
+
+
+
