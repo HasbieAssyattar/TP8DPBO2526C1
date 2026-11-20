@@ -80,6 +80,9 @@ Program ini merupakan website sistem informasi akademik (pengelolaan Fakultas, D
 6. Seluruh aksi hapus data dilengkapi dengan konfirmasi dialog untuk mencegah penghapusan yang tidak disengaja.
 
 ## Dokumentasi
+<img width="1908" height="968" alt="Screenshot 2026-11-20 192833" src="https://github.com/user-attachments/assets/9b54e4f0-c3d1-42da-b215-9d26a70c6404" />
+<img width="1912" height="975" alt="Screenshot 2026-11-20 192828" src="https://github.com/user-attachments/assets/de682a55-1242-488d-9b71-c0dbcd23f7c9" />
+<img width="1906" height="1027" alt="Screenshot 2026-11-20 192821" src="https://github.com/user-attachments/assets/42de61e0-6e6b-409f-8bb2-950a5adcb786" />
 
 
 
