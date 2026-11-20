@@ -44,16 +44,12 @@ TP8/
 ├── Dokumentasi/
 └── Project/
     ├── config.php
-    ├── db_tp8.sql
     ├── index.php
     ├── lecturers.php
     ├── faculties.php
     ├── matkul.php
     ├── bootstrap.min.css
     ├── bootstrap.bundle.min.js
-    ├── bootstrap.min.js
-    ├── jquery.min.js
-    ├── popper.min.js
     ├── controllers/
     │   ├── FacultyController.php
     │   ├── LecturerController.php
